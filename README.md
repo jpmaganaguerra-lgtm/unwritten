@@ -1,4 +1,4 @@
-# UNWRITTEN LIVING · Investment & Partnership Overview
+# UNWRITTEN Homes & Villas · Investment & Partnership Overview
 
 Presentación institucional interactiva para inversionistas (*Capital Partners*) y propietarios de activos (*Property Partners*). Sitio estático: HTML, CSS y JavaScript sin dependencias ni proceso de compilación.
 
@@ -30,7 +30,8 @@ assets/
   js/data.js               FUENTE ÚNICA: textos, cifras, supuestos, escenarios, fuentes
   js/finance.js            Motor financiero puro (sin DOM)
   js/app.js                Render, selector de audiencia, simuladores, exportación
-  logo/ellipsis.svg        THE ELLIPSIS (símbolo principal)
+  logo/unwritten-homes-villas.svg  Logotipo oficial (fuente: Mesa de trabajo 4.svg)
+  logo/ellipsis-symbol.svg        THE ELLIPSIS, solo símbolo (favicon)
 docs/
   formulas.md              Fórmulas, definiciones y limitaciones del modelo
   data-sources.md          Registro de fuentes, estado de verificación y supuestos
@@ -70,9 +71,10 @@ Antes de compartir el documento con terceros, revise `docs/data-sources.md`.
 
 ## Pendientes conocidos
 
-- **Logotipo:** el wordmark usa Instrument Serif con tracking. El manual exige lettering propio; debe reemplazarse por el arte final del diseñador. THE ELLIPSIS es un placeholder geométrico que debe validarse y refinarse antes de producción.
+- **Tipografía del logotipo:** el SVG oficial contiene el texto con la fuente Adam Bold. Si la fuente no está instalada, el navegador usa una alterna. Pida al diseñador una versión con texto convertido a trazos (outlines) para producción.
+- **Color del fondo del logotipo:** el SVG usa `#18364d`, distinto del Deep Azzurro `#263B55` del manual. Confirme cuál es el valor correcto.
 - **Fotografía:** no hay material fotográfico. Los espacios reservados se indican como "fotografía pendiente". No se usan imágenes de personas mayores estereotipadas, conforme al brief.
-- **Nombre de la operadora:** el documento de negocio usa el nombre de trabajo *Property Seniors*; la identidad elegida es UNWRITTEN LIVING. Confirme la arquitectura de marca antes de publicar.
+- **Nombre de la operadora:** el documento de negocio usa el nombre de trabajo *Property Seniors*; la identidad elegida es UNWRITTEN Homes & Villas. Confirme la arquitectura de marca antes de publicar.
 - **Legal:** cualquier oferta de valores requiere PPM y asesoría de abogados especializados en regulación financiera mexicana.
 - **Valor terminal, reservas FF&E e impuestos** no están modelados en el simulador de activo.
 
@@ -86,4 +88,4 @@ Compatible con GitHub Pages (rama `main`, carpeta raíz), Netlify o cualquier ho
 
 ## Licencia
 
-Todos los derechos reservados. Uso restringido a UNWRITTEN LIVING y a las personas autorizadas por la empresa.
+Todos los derechos reservados. Uso restringido a UNWRITTEN Homes & Villas y a las personas autorizadas por la empresa.

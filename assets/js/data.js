@@ -1,5 +1,5 @@
 /* ==========================================================================
-   UNWRITTEN LIVING — Fuente única de datos (brief §9.3)
+   UNWRITTEN Homes & Villas — Fuente única de datos (brief §9.3)
    Todas las cifras, textos y supuestos viven aquí. Nada se duplica en la UI.
    Estado de cada dato: VERIFIED | ASSUMPTION | ESTIMATE | PROJECTION | SCENARIO | PENDING
    ========================================================================== */
@@ -16,7 +16,7 @@
   };
 
   const CONFIG = {
-    operatorName: 'UNWRITTEN LIVING',
+    operatorName: 'UNWRITTEN Homes & Villas',
     descriptor: 'INDEPENDENT HOSPITALITY',
     tagline: 'YOUR STORY IS FAR FROM OVER.',
     deckTitle: 'Investment & Property Partnership Overview',
@@ -89,7 +89,7 @@
     {
       id: 'summary', num: '02', title: 'Resumen ejecutivo', nav: 'Resumen', group: 'Overview',
       kicker: 'Executive Summary',
-      lead: 'UNWRITTEN LIVING es un operador especializado de hospitalidad. Selecciona, adapta y opera alojamientos existentes para viajeros mayores de 55 años que quieren seguir viajando con independencia, comodidad y confianza.',
+      lead: 'UNWRITTEN Homes & Villas es un operador especializado de hospitalidad. Selecciona, adapta y opera alojamientos existentes para viajeros mayores de 55 años que quieren seguir viajando con independencia, comodidad y confianza.',
       blocks: [
         { type: 'indicators', items: [
           { k: 'Target Market', v: 'Viajeros independientes 55+ y sus familias' },
@@ -189,7 +189,7 @@
     {
       id: 'standards', num: '08', title: 'Estándares del producto', nav: 'Estándares', group: 'Strategy',
       kicker: 'Product & Property Standards',
-      lead: 'La clasificación es un estándar privado de UNWRITTEN LIVING. No es una certificación gubernamental ni una garantía universal de accesibilidad.',
+      lead: 'La clasificación es un estándar privado de UNWRITTEN Homes & Villas. No es una certificación gubernamental ni una garantía universal de accesibilidad.',
       blocks: [
         { type: 'table', head: ['Categoría', 'Puntuación', 'Perfil de huésped'], rows: [
           ['Senior Adapted Plus', '90–100', 'Movilidad reducida con condiciones verificadas'],
@@ -240,7 +240,7 @@
     {
       id: 'business', num: '11', title: 'Modelo de negocio', nav: 'Modelo', group: 'Business Model',
       kicker: 'Business Model',
-      lead: 'El propietario aporta el activo. UNWRITTEN LIVING aporta la plataforma operativa. Cada peso de ingreso se asigna a su entidad económica.',
+      lead: 'El propietario aporta el activo. UNWRITTEN Homes & Villas aporta la plataforma operativa. Cada peso de ingreso se asigna a su entidad económica.',
       blocks: [
         { type: 'flow', items: ['Property Owner provides the asset', 'PSS provides the operating platform', 'Guest generates accommodation revenue', 'Operator earns management and service fees'] },
         { type: 'table', head: ['Fuente de ingreso', 'Tipo', 'Cómo se cobra'], rows: [
@@ -303,7 +303,7 @@
       kicker: 'Competitive Positioning',
       lead: 'No afirmamos que no existe competencia. La diferenciación está en el modelo operativo integrado.',
       blocks: [
-        { type: 'table', head: ['Dimensión', 'Hotel tradicional', 'STR manager', 'OTA', 'Senior travel co.', 'UNWRITTEN LIVING'], rows: [
+        { type: 'table', head: ['Dimensión', 'Hotel tradicional', 'STR manager', 'OTA', 'Senior travel co.', 'UNWRITTEN Homes & Villas'], rows: [
           ['Control operativo', 'Alto', 'Medio', 'Bajo', 'Bajo', 'Alto'],
           ['Especialización senior', 'Baja', 'Baja', 'Baja', 'Alta', 'Alta'],
           ['Adaptación física', 'Variable', 'Baja', 'Baja', 'Variable', 'Verificada'],
@@ -353,7 +353,7 @@
       audience: 'property',
       lead: 'Monetizar y diferenciar un activo existente mediante una operación especializada. El propietario conserva la propiedad del activo.',
       blocks: [
-        { type: 'table', head: ['Qué aporta el propietario', 'Qué aporta UNWRITTEN LIVING'], rows: [
+        { type: 'table', head: ['Qué aporta el propietario', 'Qué aporta UNWRITTEN Homes & Villas'], rows: [
           ['El inmueble y su titularidad', 'Auditoría, selección y adecuación'],
           ['Inversión estructural y mejoras mayores', 'Comercialización y revenue management'],
           ['Autorizaciones de gastos acordados', 'Reservas, atención y check-in'],

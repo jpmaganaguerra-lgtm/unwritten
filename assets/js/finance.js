@@ -1,5 +1,5 @@
 /* ==========================================================================
-   UNWRITTEN LIVING — Motor financiero (puro, sin DOM)
+   UNWRITTEN Homes & Villas — Motor financiero (puro, sin DOM)
    Fórmulas documentadas en docs/formulas.md. Probado en tests/finance.test.js.
    ========================================================================== */
 (function (root) {

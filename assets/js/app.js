@@ -1,19 +1,24 @@
 /* ==========================================================================
-   UNWRITTEN LIVING — Aplicación de presentación
-   Renderiza desde data.js y calcula con finance.js. Sin dependencias externas.
+   UNWRITTEN Homes & Villas — Aplicación de presentación
+   Renderiza desde data.js / idea.js y calcula con finance.js. Sin dependencias.
    ========================================================================== */
 (function () {
   'use strict';
 
   const { STATUS, CONFIG, BASE_ASSUMPTIONS, SCENARIOS, CHAPTERS, SOURCES } = window.UL;
+  const IDEA = window.UL_IDEA;
   const F = window.Finance;
 
   const NAV_IDS = ['summary', 'market', 'assets', 'business', 'financials', 'capital', 'partnership', 'close'];
+  const NAV_LABELS = { summary: 'Resumen', market: 'Mercado', assets: 'Activos', business: 'Modelo', financials: 'Financiero', capital: 'Capital', partnership: 'Propietarios', close: 'Contacto', standards: 'Estándares' };
   const ORDER = {
     capital:  ['cover','summary','thesis','market','gap','segments','solution','standards','assets','target','business','operating','tech','gtm','competitive','financials','capital','partnership','growth','risks','team','close'],
-    property: ['cover','summary','assets','target','standards','solution','segments','market','gap','thesis','business','operating','tech','gtm','competitive','partnership','financials','capital','growth','risks','team','close']
+    property: ['cover','summary','assets','target','standards','solution','segments','market','gap','thesis','business','operating','tech','gtm','competitive','partnership','financials','capital','growth','risks','team','close'],
+    idea:     IDEA.ORDER
   };
+  const ROUTE_NAME = { capital: 'Capital Partners', property: 'Property Partners', idea: 'Explore the Idea' };
   const CTA = {
+    idea:     { title: 'Your story is far from over.', body: 'Cuéntenos qué lugar le gustaría descubrir. Le respondemos con las propiedades, los destinos y la experiencia que mejor encajan con usted.', btn: 'Escribirnos' },
     capital:  { title: 'Let’s Build the Next Hospitality Platform.', body: 'Conversemos sobre la plataforma, el plan de validación y los términos de una eventual participación. Los términos se definen por escrito y sujetos a due diligence.', btn: 'Solicitar reunión · Capital' },
     property: { title: 'Let’s Transform Existing Assets into the Next Generation of Senior Hospitality.', body: 'Evaluamos su inmueble con la auditoría de 100 puntos y le entregamos un diagnóstico con escenarios editables. Si el activo no es viable, se lo diremos.', btn: 'Solicitar auditoría · Propietario' },
     default:  { title: 'Let’s Talk.', body: 'Elija su ruta en la portada para ver el contenido priorizado para su perfil.', btn: 'Solicitar reunión' }
@@ -30,8 +35,10 @@
   const state = { audience: null, sim: 'corporate', corp: clone(BASE_ASSUMPTIONS.corporate), asset: clone(BASE_ASSUMPTIONS.asset), scenario: 'base' };
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
 
-  /* ---------- Marca ---------- */
-  const ellipsisSVG = (cls, size) => `<svg class="${cls || ''}" viewBox="0 0 120 40" width="${size || 120}" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="12" fill="currentColor"/><circle cx="60" cy="20" r="12" fill="currentColor"/><circle cx="100" cy="20" r="12" fill="currentColor"/></svg>`;
+  /* ---------- Símbolo THE ELLIPSIS (geometría del logotipo oficial) ---------- */
+  function ellipsisSVG(size, extraClass) {
+    return `<svg class="${extraClass || ''}" viewBox="167 77 48 15" width="${size}" fill="currentColor" aria-hidden="true" focusable="false"><circle cx="175.07" cy="84.46" r="5.67"/><circle cx="191.07" cy="84.46" r="5.67"/><circle cx="207.07" cy="84.46" r="5.67"/></svg>`;
+  }
 
   /* ---------- Render de bloques ---------- */
   function tagFor(st) {
@@ -67,6 +74,24 @@
         return `<div class="block timeline">${b.items.map(s => `<div class="step"><h4>${esc(s.t)}</h4><p>${esc(s.d)}</p><span class="gate">${esc(s.gate)}</span></div>`).join('')}</div>`;
       case 'simulators':
         return `<div class="block" id="simulators">${renderSimulatorShell()}</div>`;
+
+      /* ----- Ruta Explore the Idea ----- */
+      case 'hero':
+        return `<div class="block hero-belief"><span class="label">${esc(b.label)}</span><p class="big">${esc(b.big)}</p><ul class="promise">${b.promise.map(p => `<li>${esc(p)}</li>`).join('')}</ul></div>`;
+      case 'manifesto':
+        return `<div class="block manifesto">${b.paragraphs.map(p => `<p>${esc(p)}</p>`).join('')}<p class="sign">${esc(b.sign)}</p></div>`;
+      case 'symbol':
+        return `<div class="block symbol-block">${ellipsisSVG(360)}<p class="caption">${esc(b.caption)}</p>
+          <div class="symbol-variants">
+            <div class="v1">${ellipsisSVG(96)}<span>Deep Azzurro / Sky Celeste</span></div>
+            <div class="v2">${ellipsisSVG(96)}<span>Warm Ivory / Deep Azzurro</span></div>
+            <div class="v3">${ellipsisSVG(96)}<span>Sky Celeste / Deep Azzurro</span></div>
+          </div></div>`;
+      case 'chips':
+        return `<div class="block">${b.title ? `<h3>${esc(b.title)}</h3>` : ''}<div class="chips">${b.items.map(i => `<span>${esc(i)}</span>`).join('')}</div></div>`;
+      case 'photos':
+        return `<div class="block photos">${b.items.map(p => `<div class="photo-slot"><strong>${esc(p.t)}</strong><span>${esc(p.d)}</span><span>Fotografía pendiente</span></div>`).join('')}</div>`;
+
       case 'cta':
         return `<div class="block cta-block" id="cta"><p class="eyebrow" style="margin:0;color:var(--sky)">Siguiente paso</p><h3 class="big" id="cta-title" style="color:var(--ivory);text-transform:none;letter-spacing:0;font:400 clamp(32px,4.4vw,52px)/1.05 var(--serif)"></h3><p id="cta-body"></p><div><a class="btn" id="cta-btn" href="#contact">Solicitar reunión</a></div></div>`;
       case 'contact':
@@ -86,7 +111,7 @@
 
   function renderChapter(c) {
     if (c.id === 'cover') return '';
-    const audienceNote = c.audience ? `<p class="note" style="margin:-24px 0 32px">Ruta: ${c.audience === 'capital' ? 'Capital Partners' : 'Property Partners'}</p>` : '';
+    const routeNote = c.audience ? `<p class="note" style="margin:-24px 0 32px">Ruta: ${esc(ROUTE_NAME[c.audience])}</p>` : '';
     return `<section class="chapter" id="ch-${c.id}" aria-labelledby="h-${c.id}" data-id="${c.id}">
       <div class="chapter-inner">
         <header class="chap-head">
@@ -94,7 +119,7 @@
           <div>${c.kicker ? `<span class="kicker">${esc(c.kicker)}</span>` : ''}<h2 id="h-${c.id}">${esc(c.title)}</h2></div>
         </header>
         ${c.lead ? `<p class="lead">${esc(c.lead)}</p>` : ''}
-        ${audienceNote}
+        ${routeNote}
         ${c.blocks.map(renderBlock).join('')}
       </div>
     </section>`;
@@ -103,29 +128,38 @@
   /* ---------- Portada, navegación ---------- */
   function renderCover() {
     return `<section class="cover" id="ch-cover" aria-labelledby="h-cover">
-      ${ellipsisSVG('ellipsis-hero', 380)}
       <div class="cover-inner">
+        <div class="cover-logo"><img src="assets/logo/unwritten-homes-villas.svg" alt="UNWRITTEN Homes &amp; Villas"></div>
+        <h1 id="h-cover" class="sr-only">UNWRITTEN Homes &amp; Villas</h1>
         <span class="eyebrow">${esc(CONFIG.descriptor)} · ${esc(CONFIG.date)}</span>
-        <h1 id="h-cover">UNWRITTEN <span class="live">LIVING</span></h1>
         <p class="lede">The Next Evolution of Hospitality.</p>
         <p class="meta">${esc(CONFIG.deckTitle)} · ${esc(CONFIG.market)} · Versión ${esc(CONFIG.version)} · Confidencial</p>
       </div>
       <div class="selector" role="group" aria-label="Seleccione su ruta de lectura">
+        <button type="button" data-audience="idea" aria-pressed="false">
+          <span class="k">Ruta 01</span><span class="t">Explore the Idea</span>
+          <span class="d">Nuestra historia, el manifiesto y el símbolo. Sin cifras ni oferta de inversión.</span></button>
         <button type="button" data-audience="capital" aria-pressed="false">
-          <span class="k">Ruta 01</span><span class="t">Explore as Capital Partner</span>
+          <span class="k">Ruta 02</span><span class="t">Explore as Capital Partner</span>
           <span class="d">Plataforma, modelo financiero, uso de fondos y hoja de ruta.</span></button>
         <button type="button" data-audience="property" aria-pressed="false">
-          <span class="k">Ruta 02</span><span class="t">Explore as Property Partner</span>
-          <span class="d">Perfil del activo, estándar de auditoría, simulador de factibilidad.</span></button>
+          <span class="k">Ruta 03</span><span class="t">Explore as Property Partner</span>
+          <span class="d">Perfil del activo, estándar de auditoría y simulador de factibilidad.</span></button>
       </div>
     </section>`;
   }
 
   function renderNav() {
     const nav = document.getElementById('navlinks');
-    const ids = state.audience === 'property' ? ['assets', 'standards', 'financials', 'partnership', 'market', 'close'] : NAV_IDS;
-    const label = { summary: 'Resumen', market: 'Mercado', assets: 'Activos', business: 'Modelo', financials: 'Financiero', capital: 'Capital', partnership: 'Propietarios', close: 'Contacto', standards: 'Estándares' };
-    nav.innerHTML = ids.map(id => `<a href="#ch-${id}" data-nav="${id}">${label[id]}</a>`).join('');
+    let ids, labels;
+    if (state.audience === 'idea') {
+      ids = Object.keys(IDEA.NAV);
+      labels = IDEA.NAV;
+    } else {
+      ids = state.audience === 'property' ? ['assets', 'standards', 'financials', 'partnership', 'market', 'close'] : NAV_IDS;
+      labels = NAV_LABELS;
+    }
+    nav.innerHTML = ids.map(id => `<a href="#ch-${id}" data-nav="${id}">${esc(labels[id])}</a>`).join('');
   }
 
   function applyAudience(a) {
@@ -133,7 +167,7 @@
     document.body.dataset.audience = a || '';
     document.querySelectorAll('[data-audience]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.audience === a)));
     const order = ORDER[a] || ORDER.capital;
-    const map = Object.fromEntries(CHAPTERS.map(c => [c.id, c]));
+    const map = Object.fromEntries([...CHAPTERS, ...IDEA.CHAPTERS].map(c => [c.id, c]));
     const main = document.getElementById('deck');
     main.innerHTML = renderCover() + order.filter(id => id !== 'cover').map(id => renderChapter(map[id])).join('');
     const cta = CTA[a] || CTA.default;
@@ -141,16 +175,19 @@
     if (t) { t.textContent = cta.title; bd.textContent = cta.body; bt.textContent = cta.btn; }
     main.querySelectorAll('[data-audience]').forEach(b => b.addEventListener('click', () => choose(b.dataset.audience)));
     renderNav();
-    initSimulators();
     renderSimulatorTabs();
     refreshSimulator();
     try { localStorage.setItem('ul-audience', a || ''); } catch (e) { /* almacenamiento opcional */ }
-    if (a) document.getElementById('ch-summary').scrollIntoView({ behavior: 'smooth' });
+    if (a) {
+      const firstId = a === 'idea' ? 'ch-i-idea' : 'ch-summary';
+      const target = document.getElementById(firstId);
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   function choose(a) {
     applyAudience(a);
-    history.replaceState(null, '', '#ch-summary');
+    history.replaceState(null, '', a === 'idea' ? '#ch-i-idea' : '#ch-summary');
   }
 
   /* ---------- Simuladores ---------- */
@@ -192,12 +229,10 @@
     });
   }
 
-  function initSimulators() { /* estado ya inicializado; reservado para extensiones */ }
-
   function inputsHTML(defs, values, prefix) {
     let g = '', html = '';
     defs.forEach(d => {
-      if (d.g !== g) { if (g) html += ''; g = d.g; html += `<div class="group-title">${esc(d.g)}</div>`; }
+      if (d.g !== g) { g = d.g; html += `<div class="group-title">${esc(d.g)}</div>`; }
       const v = values[d.k];
       const id = `${prefix}-${d.k}`;
       html += `<div class="field" data-key="${d.k}">
@@ -268,7 +303,7 @@
 
     panel.querySelectorAll('[data-scen]').forEach(b => b.addEventListener('click', () => setScenario(b.dataset.scen)));
     bindInputs(defs, vals, prefix, () => { state.scenario = 'custom'; renderResults(); });
-    document.getElementById('btn-reset').onclick = () => { state.scenario = 'base'; setScenario('base'); };
+    document.getElementById('btn-reset').onclick = () => setScenario('base');
     document.getElementById('btn-csv').onclick = exportCSV;
     document.getElementById('btn-json').onclick = exportJSON;
     document.getElementById('btn-print').onclick = () => window.print();
@@ -329,20 +364,18 @@
   }
 
   function renderScenarioTable() {
-    const keys = ['conservative', 'base', 'upside'];
-    const rows = keys.map(k => {
-      const merged = Object.assign({}, BASE_ASSUMPTIONS.asset, SCENARIOS[k].asset);
-      const a = F.asset(merged);
-      const c = F.corporate(Object.assign({}, BASE_ASSUMPTIONS.corporate, SCENARIOS[k].corporate, { properties: 10, unitsPerProperty: 4 }));
-      return { label: SCENARIOS[k].label, a, c };
-    });
+    const rows = ['conservative', 'base', 'upside'].map(k => ({
+      label: SCENARIOS[k].label,
+      a: F.asset(Object.assign({}, BASE_ASSUMPTIONS.asset, SCENARIOS[k].asset)),
+      c: F.corporate(Object.assign({}, BASE_ASSUMPTIONS.corporate, SCENARIOS[k].corporate))
+    }));
     const line = (name, f) => `<tr><td>${name}</td>${rows.map(r => `<td class="num">${f(r)}</td>`).join('')}</tr>`;
     return `<h3 style="margin:28px 0 12px;font:600 12px/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ocean)">Comparación de escenarios (activo de referencia)</h3>
       <div class="table-wrap"><table class="table-compact"><thead><tr><th>Métrica</th>${rows.map(r => `<th class="num">${r.label}</th>`).join('')}</tr></thead><tbody>
       ${line('Gross Revenue anual', r => money(r.a.roomRevenue))}
       ${line('GOP', r => money(r.a.gop))}
       ${line('EBITDA corporativo (10 propiedades, mensual)', r => money(r.c.ebitda))}
-      ${line('CAPEX', r => money(F.asset(Object.assign({}, BASE_ASSUMPTIONS.asset, SCENARIOS[keys[rows.indexOf(r)]].asset)).cashFlows[0] * -1))}
+      ${line('CAPEX', r => money(-r.a.cashFlows[0]))}
       ${line('Payback', r => years(r.a.paybackYears))}
       ${line('TIR', r => r.a.irr === null ? 'Pending' : pct(r.a.irr))}
       ${line('VPN', r => money(r.a.npv))}
@@ -374,19 +407,18 @@
     const max = Math.max(...vals, 1), min = Math.min(...vals, 0);
     const range = max - min || 1;
     const bw = (w - 60) / points.length;
-    const y0 = 20 + (h - 50) * (max / range);
+    const yOf = v => 20 + (h - 50) * ((max - v) / range);
     const bars = points.map((p, i) => {
       const v = valueFn(p);
-      const top = 20 + (h - 50) * ((max - Math.max(v, 0)) / range);
-      const bottom = 20 + (h - 50) * ((max - Math.min(v, 0)) / range);
+      const top = yOf(Math.max(v, 0)), bottom = yOf(Math.min(v, 0));
       const x = 50 + i * bw + bw * 0.15;
       return `<rect x="${x.toFixed(1)}" y="${top.toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(1, bottom - top).toFixed(1)}" fill="${v < 0 ? '#8E2F2F' : '#263B55'}" opacity=".88"><title>${labelFn(p)}: ${money(v)}</title></rect>`;
     }).join('');
-    const zeroY = y0 + 0 ;
+    const labels = points.map((p, i) => i % 4 === 0 ? `<text x="${(50 + i * bw).toFixed(1)}" y="${h - 8}">${labelFn(p)}</text>` : '').join('');
     return `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Gráfica de barras">
-      <line class="axis" x1="50" x2="${w - 10}" y1="${(20 + (h - 50) * (max / range)).toFixed(1)}" y2="${(20 + (h - 50) * (max / range)).toFixed(1)}"/>
+      <line class="axis" x1="50" x2="${w - 10}" y1="${yOf(0).toFixed(1)}" y2="${yOf(0).toFixed(1)}"/>
       ${bars}
-      ${points.filter((_, i) => i % 4 === 0).map((p) => { const i = points.indexOf(p); return `<text x="${(50 + i * bw).toFixed(1)}" y="${h - 8}">${labelFn(p)}</text>`; }).join('')}
+      ${labels}
     </svg>`;
   }
 
@@ -474,11 +506,12 @@
     document.getElementById('btn-top').addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
     document.addEventListener('keydown', e => {
       if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+      if (!document.body.classList.contains('presenting')) return;
       const secs = [...document.querySelectorAll('section.chapter, section.cover')];
       const idx = secs.findIndex(s => s.getBoundingClientRect().top >= -10 && s.getBoundingClientRect().top < innerHeight / 2);
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') { if (document.body.classList.contains('presenting')) { e.preventDefault(); secs[Math.min(secs.length - 1, idx + 1)]?.scrollIntoView({ behavior: 'smooth' }); } }
-      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { if (document.body.classList.contains('presenting')) { e.preventDefault(); secs[Math.max(0, idx - 1)]?.scrollIntoView({ behavior: 'smooth' }); } }
-      if (e.key === 'Escape' && document.body.classList.contains('presenting')) togglePresent();
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); secs[Math.min(secs.length - 1, idx + 1)]?.scrollIntoView({ behavior: 'smooth' }); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); secs[Math.max(0, idx - 1)]?.scrollIntoView({ behavior: 'smooth' }); }
+      if (e.key === 'Escape') togglePresent();
     });
     onScroll();
   }
@@ -491,14 +524,13 @@
 
   /* ---------- Arranque ---------- */
   function boot() {
-    document.getElementById('brand-ellipsis').innerHTML = ellipsisSVG('ellipsis', 46);
     initChrome();
+    const valid = ['idea', 'capital', 'property'];
     let saved = null;
     try { saved = localStorage.getItem('ul-audience'); } catch (e) { /* sin almacenamiento */ }
     const hashAud = new URLSearchParams(location.search).get('ruta');
-    const start = (hashAud === 'capital' || hashAud === 'property') ? hashAud : (saved === 'capital' || saved === 'property' ? saved : null);
+    const start = valid.includes(hashAud) ? hashAud : (valid.includes(saved) ? saved : null);
     applyAudience(start);
-    if (!start) document.body.dataset.audience = '';
     document.getElementById('footer-version').textContent = `Versión ${CONFIG.version} · ${CONFIG.date}`;
     document.getElementById('sources-list').innerHTML = SOURCES.map(s => `<li><strong>${esc(s.id)}</strong> — ${esc(s.name)}. <em>${esc(s.use)}.</em> Estado: ${esc(s.status)}.</li>`).join('');
   }
